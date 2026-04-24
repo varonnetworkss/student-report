@@ -3578,4 +3578,26 @@ body.modal-open {
     display: none !important; /* 인쇄 안 할 요소는 이 클래스를 주면 됩니다 */
   }
 }
+@media print {
+    /* 1. 모든 요소의 배경을 투명하게가 아니라 '흰색'으로 강제 고정 */
+    html, body, div, section, article, nav, header, footer {
+        background-color: #ffffff !important;
+        background-image: none !important;
+        -webkit-print-color-adjust: exact !important; /* 브라우저에게 이 설정을 따르라고 강요 */
+        print-color-adjust: exact !important;
+    }
+
+    /* 2. 그라데이션이 들어간 특정 클래스들 저격 */
+    .home-shell, .wrap, .top-bar, .sticky-actions, #app {
+        background: #ffffff !important;
+        background-image: none !important;
+        background-color: #ffffff !important;
+    }
+
+    /* 3. 배경 그래픽 강제 제거 (가장 강력함) */
+    * {
+        -webkit-print-color-adjust: economy !important; /* 잉크 절약 모드로 강제 전환 */
+        print-color-adjust: economy !important;
+    }
+}
   
