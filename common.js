@@ -2970,31 +2970,35 @@ const observer = new MutationObserver(() => {
 // 문서 전체를 감시하여 변화가 생기면 배경을 다시 강제로 입힙니다.
 observer.observe(document.body, { childList: true, subtree: true });
 
-// 처음 로드될 때도 실행
-// 함수 이름도 겹치지 않게 변경했습니다.
-function applyCustomBackground() {
-// 중괄호 { } 로 감싸면 내부의 변수 이름이 외부와 충돌하지 않습니다.
-{
-    const applyBg = () => {
+// 변수 선언(const, let)을 아예 하지 않고 실행하는 방식입니다.
+(function() {
+    const bgUpdate = function() {
         const wrap = document.querySelector('.wrap');
         if (wrap) {
             wrap.style.setProperty('background', 'linear-gradient(135deg, #cfe8ff 0%, #fff0f8 50%, #ffd9ea 100%)', 'important');
         }
     };
 
-    // 이름을 아주 유니크하게 배경전용으로 바꿨습니다.
-    const backgroundMutationObserver = new MutationObserver(applyBg);
-    backgroundMutationObserver.observe(document.body, { childList: true, subtree: true });
+    // 변수명을 지어서 충돌시키지 않고 바로 생성하여 실행합니다.
+    new MutationObserver(bgUpdate).observe(document.body, { childList: true, subtree: true });
     
-    applyBg();
+    bgUpdate();
 
-    window.onbeforeprint = () => {
-        document.querySelectorAll('[style*="background"]').forEach(el => {
+    // 인쇄 설정
+    window.onbeforeprint = function() {
+        document.querySelectorAll('[style*="background"]').forEach(function(el) {
             el.dataset.oldBg = el.style.background;
             el.style.setProperty('background', 'white', 'important');
             el.style.setProperty('background-image', 'none', 'important');
         });
     };
+
+    window.onafterprint = function() {
+        document.querySelectorAll('[style*="background"]').forEach(function(el) {
+            if (el.dataset.oldBg) el.style.background = el.dataset.oldBg;
+        });
+    };
+})();
 
     window.onafterprint = () => {
         document.querySelectorAll('[style*="background"]').forEach(el => {
