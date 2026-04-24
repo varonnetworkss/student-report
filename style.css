@@ -3542,3 +3542,14 @@ body.modal-open {
     background: #ffffff !important;
   }
 }
+@media print {
+  .home-shell,
+  .wrap,
+  .page,
+  .hero-card,
+  .report-page {
+    background: #ffffff !important;
+    background-image: none !important;
+  }
+}
+  
