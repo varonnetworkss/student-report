@@ -3584,7 +3584,22 @@ body.modal-open {
   max-width: 1680px;
   width: calc(100% - 48px);
 }
+.wrap:has(.bulk-page-wide) {
+  max-width: 1500px;
+  width: calc(100% - 48px);
+}
 
-.bulk-page-wide {
-  min-width: 1450px;
+.bulk-layout {
+  display: grid;
+  grid-template-columns: minmax(560px, 0.95fr) minmax(520px, 1.05fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.bulk-detail-card {
+  min-width: 0;
+}
+
+.bulk-table-card {
+  min-width: 0;
 }
