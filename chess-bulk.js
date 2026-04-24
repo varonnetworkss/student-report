@@ -218,7 +218,10 @@ function renderChessBulkMode() {
     CHESS_BULK_SELECTED_ID = CHESS_BULK_ROWS[0].id;
   }
 
-  app.innerHTML = `    <h1>단체 입력</h1>
+ app.innerHTML = `
+  <div class="bulk-page-wide">
+    <h1>단체 입력</h1>
+
     <p class="muted" style="margin-bottom:14px;">
   학생 명단은 엑셀에서 이름, 회원코드, 학교, 학년 4열을 그대로 복사해서 한 번에 넣고,
   선택한 학생의 시험지 유형에 맞는 답안을 오른쪽에서 바로 입력하면 됨.
@@ -297,6 +300,7 @@ function renderChessBulkMode() {
     <div class="bulk-result-card">
       ${renderBulkResultPanel()}
     </div>
+  </div>
   `;
 }
 
