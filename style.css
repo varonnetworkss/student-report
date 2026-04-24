@@ -3580,4 +3580,11 @@ body.modal-open {
         box-shadow: none !important;
     }
 }
+.wrap:has(.bulk-page-wide) {
+  max-width: 1680px;
+  width: calc(100% - 48px);
+}
 
+.bulk-page-wide {
+  min-width: 1450px;
+}
