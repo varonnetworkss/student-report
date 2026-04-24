@@ -3562,30 +3562,19 @@ body.modal-open {
   justify-content: center;
   align-items: center;
 }
-
-/* [인쇄용] 모든 배경 제거 */
 @media print {
-    /* 1. 배경만 흰색으로, 글자는 검은색으로 강제 지정 */
-    html, body, .home-shell, .wrap, #app {
+    html, body, .home-shell, .wrap {
         background: #ffffff !important;
-        background-color: #ffffff !important;
         background-image: none !important;
-        color: #000000 !important;
     }
 
-    /* 2. 모든 요소의 배경 이미지를 제거 (그라데이션 제거 핵심) */
-    * {
+    .home-shell,
+    .wrap,
+    .hero-card,
+    .report-page,
+    .page {
+        background: #ffffff !important;
         background-image: none !important;
         box-shadow: none !important;
-        text-shadow: none !important;
-        -webkit-print-color-adjust: economy !important;
-        print-color-adjust: economy !important;
-    }
-
-    /* 3. 투명하게 가려졌던 글자들을 다시 보이게 함 */
-    p, span, h1, h2, h3, h4, div, td, th {
-        color: #000000 !important;
-        opacity: 1 !important;
-        visibility: visible !important;
     }
 }
