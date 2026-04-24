@@ -2973,43 +2973,36 @@ observer.observe(document.body, { childList: true, subtree: true });
 // 처음 로드될 때도 실행
 // 함수 이름도 겹치지 않게 변경했습니다.
 function applyCustomBackground() {
-    const wrap = document.querySelector('.wrap');
-    if (wrap) {
-        wrap.style.setProperty('background', 'linear-gradient(135deg, #cfe8ff 0%, #fff0f8 50%, #ffd9ea 100%)', 'important');
-    }
+// 중괄호 { } 로 감싸면 내부의 변수 이름이 외부와 충돌하지 않습니다.
+{
+    const applyBg = () => {
+        const wrap = document.querySelector('.wrap');
+        if (wrap) {
+            wrap.style.setProperty('background', 'linear-gradient(135deg, #cfe8ff 0%, #fff0f8 50%, #ffd9ea 100%)', 'important');
+        }
+    };
+
+    // 이름을 아주 유니크하게 배경전용으로 바꿨습니다.
+    const backgroundMutationObserver = new MutationObserver(applyBg);
+    backgroundMutationObserver.observe(document.body, { childList: true, subtree: true });
+    
+    applyBg();
+
+    window.onbeforeprint = () => {
+        document.querySelectorAll('[style*="background"]').forEach(el => {
+            el.dataset.oldBg = el.style.background;
+            el.style.setProperty('background', 'white', 'important');
+            el.style.setProperty('background-image', 'none', 'important');
+        });
+    };
+
+    window.onafterprint = () => {
+        document.querySelectorAll('[style*="background"]').forEach(el => {
+            if (el.dataset.oldBg) el.style.background = el.dataset.oldBg;
+        });
+    };
 }
 
-// 변수 이름을 bgObserver로 변경하여 충돌 방지
-const bgObserver = new MutationObserver(() => {
-    applyCustomBackground();
-});
-
-// 감시 시작
-bgObserver.observe(document.body, { childList: true, subtree: true });
-
-// 처음 로드 시 실행
-applyCustomBackground();
-
-// 인쇄 설정 (변수명 충돌 없도록 안전하게 수정)
-window.onbeforeprint = function() {
-    const bgElements = document.querySelectorAll('[style*="background"]');
-    for (let i = 0; i < bgElements.length; i++) {
-        const el = bgElements[i];
-        el.dataset.oldBg = el.style.background;
-        el.style.setProperty('background', 'white', 'important');
-        el.style.setProperty('background-image', 'none', 'important');
-    }
-};
-
-window.onafterprint = function() {
-    const bgElements = document.querySelectorAll('[style*="background"]');
-    for (let i = 0; i < bgElements.length; i++) {
-        const el = bgElements[i];
-        if (el.dataset.oldBg) {
-            el.style.background = el.dataset.oldBg;
-        }
-    }
-};
 
 
 window.onafterprint = function() {
