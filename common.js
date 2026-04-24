@@ -2971,24 +2971,46 @@ const observer = new MutationObserver(() => {
 observer.observe(document.body, { childList: true, subtree: true });
 
 // 처음 로드될 때도 실행
-forceBackground();
-// 1. 화면이 바뀔 때마다 배경을 감시하고 유지하는 기능
-const observer = new MutationObserver(() => {
+// 함수 이름도 겹치지 않게 변경했습니다.
+function applyCustomBackground() {
     const wrap = document.querySelector('.wrap');
     if (wrap) {
         wrap.style.setProperty('background', 'linear-gradient(135deg, #cfe8ff 0%, #fff0f8 50%, #ffd9ea 100%)', 'important');
     }
-});
-observer.observe(document.body, { childList: true, subtree: true });
+}
 
-// 2. 인쇄 직전에 인라인 배경 스타일을 강제로 흰색으로 만드는 기능
+// 변수 이름을 bgObserver로 변경하여 충돌 방지
+const bgObserver = new MutationObserver(() => {
+    applyCustomBackground();
+});
+
+// 감시 시작
+bgObserver.observe(document.body, { childList: true, subtree: true });
+
+// 처음 로드 시 실행
+applyCustomBackground();
+
+// 인쇄 설정 (변수명 충돌 없도록 안전하게 수정)
 window.onbeforeprint = function() {
-    document.querySelectorAll('[style*="background"]').forEach(el => {
+    const bgElements = document.querySelectorAll('[style*="background"]');
+    for (let i = 0; i < bgElements.length; i++) {
+        const el = bgElements[i];
         el.dataset.oldBg = el.style.background;
         el.style.setProperty('background', 'white', 'important');
         el.style.setProperty('background-image', 'none', 'important');
-    });
+    }
 };
+
+window.onafterprint = function() {
+    const bgElements = document.querySelectorAll('[style*="background"]');
+    for (let i = 0; i < bgElements.length; i++) {
+        const el = bgElements[i];
+        if (el.dataset.oldBg) {
+            el.style.background = el.dataset.oldBg;
+        }
+    }
+};
+
 
 window.onafterprint = function() {
     document.querySelectorAll('[style*="background"]').forEach(el => {
