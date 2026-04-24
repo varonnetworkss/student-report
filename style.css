@@ -3552,4 +3552,30 @@ body.modal-open {
     background-image: none !important;
   }
 }
+/* [화면용] 배경 설정 */
+.wrap {
+  width: 100%;
+  min-height: 100vh;
+  /* 여기에 원하는 그라데이션을 넣으세요 */
+  background: linear-gradient(135deg, #cfe8ff 0%, #fff0f8 50%, #ffd9ea 100%) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* [인쇄용] 모든 배경 제거 */
+@media print {
+  *, *::before, *::after {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #000 !important;
+    box-shadow: none !important;
+  }
+  .wrap {
+    background: #ffffff !important;
+  }
+  .no-print {
+    display: none !important; /* 인쇄 안 할 요소는 이 클래스를 주면 됩니다 */
+  }
+}
   
