@@ -3537,3 +3537,8 @@ body.modal-open {
   color: #333 !important;
   border: 1px solid #ffd43b !important;
 }
+@media print {
+  .home-shell {
+    background: #ffffff !important;
+  }
+}
