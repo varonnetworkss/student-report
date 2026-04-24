@@ -2972,3 +2972,26 @@ observer.observe(document.body, { childList: true, subtree: true });
 
 // 처음 로드될 때도 실행
 forceBackground();
+// 1. 화면이 바뀔 때마다 배경을 감시하고 유지하는 기능
+const observer = new MutationObserver(() => {
+    const wrap = document.querySelector('.wrap');
+    if (wrap) {
+        wrap.style.setProperty('background', 'linear-gradient(135deg, #cfe8ff 0%, #fff0f8 50%, #ffd9ea 100%)', 'important');
+    }
+});
+observer.observe(document.body, { childList: true, subtree: true });
+
+// 2. 인쇄 직전에 인라인 배경 스타일을 강제로 흰색으로 만드는 기능
+window.onbeforeprint = function() {
+    document.querySelectorAll('[style*="background"]').forEach(el => {
+        el.dataset.oldBg = el.style.background;
+        el.style.setProperty('background', 'white', 'important');
+        el.style.setProperty('background-image', 'none', 'important');
+    });
+};
+
+window.onafterprint = function() {
+    document.querySelectorAll('[style*="background"]').forEach(el => {
+        if (el.dataset.oldBg) el.style.background = el.dataset.oldBg;
+    });
+};
