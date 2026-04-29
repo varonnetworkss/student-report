@@ -3603,44 +3603,60 @@ body.modal-open {
 .bulk-table-card {
   min-width: 0;
 }
-/* ===== 단체입력 레이아웃 강제 정상화 ===== */
-html, body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
+/* ===== 단체 입력 화면 깨짐 최종 수정 ===== */
 
-.wrap:has(.bulk-page-wide),
-#app:has(.bulk-page-wide) {
-  max-width: 1280px !important;
-  width: calc(100% - 32px) !important;
-  margin: 0 auto !important;
+.wrap:has(.bulk-page-wide) {
+  display: block !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+
+  width: min(1500px, calc(100% - 48px)) !important;
+  max-width: 1500px !important;
+  min-height: auto !important;
+
+  margin: 32px auto 80px !important;
+  padding: 28px !important;
+  box-sizing: border-box !important;
 }
 
 .bulk-page-wide {
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
+  overflow-x: hidden !important;
 }
 
-.bulk-layout,
-.bulk-main,
-.bulk-content {
+.bulk-layout {
   display: grid !important;
-  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr) !important;
-  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr) !important;
+  gap: 20px !important;
+  align-items: start !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
-.bulk-left,
-.bulk-right {
-  min-width: 0;
+.bulk-table-card,
+.bulk-detail-card {
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
 
-.bulk-student-table {
-  width: 100%;
-  table-layout: fixed;
+.bulk-table-card table {
+  width: 100% !important;
+  table-layout: fixed !important;
 }
 
-textarea {
-  width: 100%;
-  max-width: 100%;
+.bulk-table-card input,
+.bulk-table-card select,
+.bulk-detail-card input,
+.bulk-detail-card select,
+.bulk-detail-card textarea {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+html,
+body {
+  overflow-x: hidden !important;
 }
