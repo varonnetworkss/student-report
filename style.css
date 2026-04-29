@@ -3660,3 +3660,40 @@ html,
 body {
   overflow-x: hidden !important;
 }
+/* ===== 단체입력 화면 폭 복구 최종 ===== */
+body:has(.bulk-page-wide) {
+  overflow-x: auto !important;
+}
+
+body:has(.bulk-page-wide) .wrap {
+  width: min(1500px, calc(100vw - 48px)) !important;
+  max-width: 1500px !important;
+  min-width: 1200px !important;
+  margin: 32px auto 80px !important;
+  display: block !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+}
+
+body:has(.bulk-page-wide) .bulk-page-wide {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+body:has(.bulk-page-wide) .bulk-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr) !important;
+  gap: 20px !important;
+  align-items: start !important;
+}
+
+body:has(.bulk-page-wide) table {
+  max-width: 100% !important;
+}
+
+body:has(.bulk-page-wide) input,
+body:has(.bulk-page-wide) select,
+body:has(.bulk-page-wide) textarea {
+  max-width: 100% !important;
+}
