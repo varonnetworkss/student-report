@@ -3603,3 +3603,44 @@ body.modal-open {
 .bulk-table-card {
   min-width: 0;
 }
+/* ===== 단체입력 레이아웃 강제 정상화 ===== */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.wrap:has(.bulk-page-wide),
+#app:has(.bulk-page-wide) {
+  max-width: 1280px !important;
+  width: calc(100% - 32px) !important;
+  margin: 0 auto !important;
+}
+
+.bulk-page-wide {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.bulk-layout,
+.bulk-main,
+.bulk-content {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr) !important;
+  gap: 18px;
+}
+
+.bulk-left,
+.bulk-right {
+  min-width: 0;
+}
+
+.bulk-student-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+textarea {
+  width: 100%;
+  max-width: 100%;
+}
