@@ -31,11 +31,11 @@ body {
 }
 
 .wrap {
-  max-width: 1100px;
-  margin: 28px auto;
+  width: 100%;       /* 1100px 제한을 풀고 100%로 설정 */
+  margin: 0;         /* 위아래 여백과 중앙 정렬 제거 */
   background: var(--card);
-  border-radius: 28px;
-  box-shadow: var(--shadow);
+  border-radius: 0;  /* 모서리 둥근 효과 제거 */
+  box-shadow: none;  /* 테두리 그림자 제거 */
   padding: 28px;
 }
 
