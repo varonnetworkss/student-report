@@ -3744,106 +3744,72 @@ body:has(.bulk-page-wide) textarea {
   }
 }
 
-/* 단체 입력 시 컨테이너 여백 조정 (인쇄 시 영향 최소화) */
+/* ============================================================
+   최종 해결: 바깥 테두리만 제거 + 내부 색상 유지 + 단체입력 잘림 방지
+   ============================================================ */
+
 @media print {
-  body:has(.bulk-page-wide) .wrap {
-    width: 100% !important;
+  /* 1. 내부 그래프 및 모든 색상 강제 유지 (가장 중요) */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 2. 배경 그라데이션 및 바깥 테두리/그림자만 제거 */
+  html, body {
+    background: #ffffff !important;
     margin: 0 !important;
     padding: 0 !important;
   }
-}
-/* ===== 인쇄 시 배경 제거 및 빈 페이지 해결 (JS 강제 스타일 무력화) ===== */
 
-@media print {
-  /* JS가 .wrap에 강제로 넣는 배경색을 무시하고 흰색으로 고정 */
-  div.wrap, 
-  body div.wrap, 
-  html body div.wrap {
+  /* 단체 입력 시 가로폭 짤림 방지 (1200px 제한 해제) */
+  .wrap, 
+  body:has(.bulk-page-wide) .wrap,
+  #app {
     background: #ffffff !important;
     background-image: none !important;
-    border: none !important;
     box-shadow: none !important;
+    border: none !important;
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
-    min-height: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    display: block !important;
   }
 
-  /* 모든 요소의 배경색을 강제로 흰색으로 */
-  * {
-    background-color: #ffffff !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    -webkit-print-color-adjust: economy !important;
-    print-color-adjust: economy !important;
-  }
-
-  /* 빈 페이지 방지: 성적표 페이지 설정 */
-  .chess-report-page, .page {
-    margin: 0 !important;
+  /* 3. 성적표 본체 설정: 테두리/그림자 제거 및 A4 맞춤 */
+  .page, .chess-report-page {
+    width: 210mm !important;
+    height: 296mm !important; /* A4 높이에 딱 맞춤 */
+    margin: 0 auto !important;
     padding: 10mm !important;
-    height: 297mm !important; /* A4 높이 고정 */
+    border: none !important;     /* 좆같은 테두리 제거 */
+    box-shadow: none !important;  /* 그림자 제거 */
+    background: #ffffff !important;
     page-break-after: always !important;
     break-after: page !important;
-    overflow: hidden !important;
+    overflow: hidden !important;  /* 내용 삐져나감 방지 */
   }
 
-  /* 마지막 장 다음에 빈 종이 안 나오게 설정 */
-  .chess-report-page:last-child, .page:last-child {
-    page-break-after: auto !important;
-    break-after: auto !important;
+  /* 4. 마지막 페이지 뒤에 생기는 빈 페이지 완벽 차단 */
+  .page:last-child, 
+  .chess-report-page:last-child,
+  .page:last-of-type,
+  .chess-report-page:last-of-type {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    margin-bottom: 0 !important;
   }
 
-  /* 인쇄 시 불필요한 버튼들 숨기기 */
+  /* 5. 불필요한 버튼 숨기기 */
   .no-print, .sticky-actions, .top-bar, button, .paper-actions {
     display: none !important;
   }
 }
 
-/* A4 용지 규격 정의 */
+/* 용지 설정 */
 @page {
   size: A4;
   margin: 0;
 }
-  /* ===== 단체 입력 인쇄 시 잘림 현상 및 레이아웃 수정 ===== */
-
-@media print {
-  /* 단체 입력 모드에서 강제로 설정된 가로폭과 마진 무력화 */
-  body:has(.bulk-page-wide), 
-  body:has(.bulk-page-wide) .wrap,
-  .bulk-page-wide,
-  .wrap {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-    overflow: visible !important;
-  }
-
-  /* 성적표가 잘리지 않고 페이지에 꽉 차게 설정 */
-  .page, .chess-report-page {
-    width: 210mm !important; /* A4 가로폭 고정 */
-    max-width: 210mm !important;
-    margin: 0 auto !important;
-    padding: 10mm !important;
-    box-sizing: border-box !important;
-    page-break-after: always !important;
-    break-after: page !important;
-    overflow: visible !important; /* 잘림 방지 */
-  }
-
-  /* 내부 그리드 레이아웃이 인쇄 시 깨지지 않도록 조정 */
-  .bulk-layout {
-    display: block !important;
-    width: 100% !important;
-  }
-
-  /* 인쇄 시 불필요한 스크롤바 제거 */
-  html, body {
-    overflow: visible !important;
-    height: auto !important;
-  }
-}
-
