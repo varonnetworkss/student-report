@@ -3805,3 +3805,45 @@ body:has(.bulk-page-wide) textarea {
   size: A4;
   margin: 0;
 }
+  /* ===== 단체 입력 인쇄 시 잘림 현상 및 레이아웃 수정 ===== */
+
+@media print {
+  /* 단체 입력 모드에서 강제로 설정된 가로폭과 마진 무력화 */
+  body:has(.bulk-page-wide), 
+  body:has(.bulk-page-wide) .wrap,
+  .bulk-page-wide,
+  .wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  /* 성적표가 잘리지 않고 페이지에 꽉 차게 설정 */
+  .page, .chess-report-page {
+    width: 210mm !important; /* A4 가로폭 고정 */
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    padding: 10mm !important;
+    box-sizing: border-box !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    overflow: visible !important; /* 잘림 방지 */
+  }
+
+  /* 내부 그리드 레이아웃이 인쇄 시 깨지지 않도록 조정 */
+  .bulk-layout {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* 인쇄 시 불필요한 스크롤바 제거 */
+  html, body {
+    overflow: visible !important;
+    height: auto !important;
+  }
+}
+
