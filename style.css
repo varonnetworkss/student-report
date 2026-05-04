@@ -3697,3 +3697,58 @@ body:has(.bulk-page-wide) select,
 body:has(.bulk-page-wide) textarea {
   max-width: 100% !important;
 }
+/* ===== 인쇄 시 배경 및 빈 페이지 문제 해결 최적화 ===== */
+
+@media print {
+  /* 1. 모든 배경 및 테두리 초기화 */
+  html, body {
+    background: #ffffff !important;
+    background-image: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 배경 테두리가 나오는 주요 컨테이너들 초기화 */
+  .wrap, .home-shell, .report-page, .hero-card, .card, .kpi {
+    background: #ffffff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 2. 빈 페이지 방지 설정 */
+  .page {
+    margin: 0 auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    /* 페이지가 정확히 한 페이지에 들어오도록 높이 조절 */
+    height: auto !important;
+    min-height: initial !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* 마지막 페이지 뒤에는 빈 페이지가 생기지 않도록 설정 */
+  .page:last-child {
+    page-break-after: auto !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* 인쇄 시 불필요한 UI 요소 숨기기 (버튼, 네비게이션 등) */
+  .sticky-actions, .top-bar, button, .no-print {
+    display: none !important;
+  }
+}
+
+/* 단체 입력 시 컨테이너 여백 조정 (인쇄 시 영향 최소화) */
+@media print {
+  body:has(.bulk-page-wide) .wrap {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
