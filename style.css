@@ -3660,170 +3660,43 @@ html,
 body {
   overflow-x: hidden !important;
 }
-/* ===== 단체입력 화면 폭 복구 최종 ===== */
-body:has(.bulk-page-wide) {
-  overflow-x: auto !important;
-}
-
-body:has(.bulk-page-wide) .wrap {
-  width: min(1500px, calc(100vw - 48px)) !important;
-  max-width: 1500px !important;
-  min-width: 1200px !important;
-  margin: 32px auto 80px !important;
-  display: block !important;
-  align-items: initial !important;
-  justify-content: initial !important;
-}
-
-body:has(.bulk-page-wide) .bulk-page-wide {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-}
-
-body:has(.bulk-page-wide) .bulk-layout {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr) !important;
-  gap: 20px !important;
-  align-items: start !important;
-}
-
-body:has(.bulk-page-wide) table {
-  max-width: 100% !important;
-}
-
-body:has(.bulk-page-wide) input,
-body:has(.bulk-page-wide) select,
-body:has(.bulk-page-wide) textarea {
-  max-width: 100% !important;
-}
-/* ===== 인쇄 시 사이드 배경색 및 빈 페이지 정밀 제어 ===== */
+/* ===== 행님, 이번엔 진짜 딱 두 개만 잡아. 딴 거 안 건드려. ===== */
 
 @media print {
-  /* 1. 사이드 그라데이션 배경만 제거 (디자인/위치는 유지) */
-  html, body, .wrap, #app {
-    background: #ffffff !important;
-    background-image: none !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  /* 2. 단체 입력 시 각 성적표 뒤의 빈 페이지 방지 */
-  .page, .chess-report-page {
-    /* 페이지 넘김은 유지하되, 마지막 장 뒤에는 빈 페이지가 안 생기도록 함 */
-    page-break-after: always !important;
-    break-after: page !important;
-    /* 높이가 100%를 초과하여 빈 페이지가 생기는 것을 방지 */
-    min-height: 0 !important;
-  }
-
-  /* 마지막 성적표 요소 뒤에는 절대 페이지를 넘기지 않음 */
-  .page:last-child, 
-  .chess-report-page:last-child,
-  .page:last-of-type,
-  .chess-report-page:last-of-type {
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-    margin-bottom: 0 !important;
-  }
-
-  /* 3. 인쇄 시 불필요한 버튼 숨기기 */
-  .no-print, .sticky-actions, .top-bar, button {
-    display: none !important;
-  }
-}
-
-/* 용지 설정 (여백은 브라우저 기본값에 맡겨 디자인 틀어짐 방지) */
-@page {
-  size: auto;
-  margin: 0;
-}
-/* ===== 행님 전용: 위치 보존 + 사이드 색상만 제거 ===== */
-
-@media print {
-  /* 1. 사이드 배경색(그라데이션)이랑 테두리 완전 박멸 */
-  html, body, .wrap, #app {
-    background: #ffffff !important;
-    background-image: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  /* 2. 원래 위치(중앙 정렬) 그대로 유지 */
-  .wrap {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    /* 인쇄 시에도 화면 높이를 꽉 채워서 중앙 정렬 작동하게 함 */
-    min-height: 100vh !important;
-  }
-
-  /* 3. 내부 색상은 행님이 만든 그대로 예쁘게 나오게 함 */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* 4. 빈 페이지 방지 (이미 잘 되는 거 유지) */
-  .page, .chess-report-page {
-    page-break-after: always !important;
-    break-after: page !important;
-    min-height: 0 !important;
-  }
-  .page:last-child, .chess-report-page:last-child {
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-    margin-bottom: 0 !important;
-  }
-
-  /* 5. 인쇄할 때 안 나와야 할 것들 */
-  .no-print, .sticky-actions, .top-bar, button {
-    display: none !important;
-  }
-}
-
-@page {
-  size: auto;
-  margin: 0;
-}
-/* ===== 행님, 이번엔 진짜 사이드 색상이랑 겹침만 해결함 ===== */
-
-@media print {
-  /* 1. 사이드 색상(그라데이션) 무조건 흰색으로 밀어버리기 */
+  /* 1. 사이드에 나오는 좆같은 그라데이션 색깔 삭제 */
   html, body, .wrap, #app, .chess-report-root {
     background: #ffffff !important;
-    background-image: none !important; /* 그라데이션 제거 핵심 */
+    background-image: none !important; /* 이게 색깔 빼는 핵심이야 */
+    background-color: #ffffff !important;
     border: none !important;
     box-shadow: none !important;
   }
 
-  /* 2. 겹침 현상 방지: 내가 준 flex 코드 다 빼고 기본으로 돌림 */
+  /* 2. 겹침 방지: 행님이 만든 원래 레이아웃(Block) 그대로 둠 */
   .wrap {
-    display: block !important; /* 겹치지 않게 한 줄씩 나오게 함 */
+    display: block !important;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
-  /* 3. 성적표 위치: 행님이 만든 디자인 그대로 유지 (중앙 정렬은 마진으로 처리) */
+  /* 3. 성적표 중앙 정렬: 위치 안 변하게 마진으로만 처리 */
   .page, .chess-report-page {
-    margin: 0 auto !important; /* 가로 중앙 정렬 */
+    margin: 20px auto !important; /* 위아래 여백 주고 가로 중앙 */
     background: #ffffff !important;
-    border: none !important;
-    box-shadow: none !important;
+    border: none !important;     /* 테두리 색깔 나오면 이것도 지워야 함 */
+    box-shadow: none !important;  /* 그림자도 지워버려 */
+    display: block !important;
+    position: relative !important;
   }
 
-  /* 4. 내부 색상은 그대로 (그래프 등) */
+  /* 4. 내부 색상(그래프 등) 유지 */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 5. 빈 페이지 방지 (잘 되는 거 유지) */
+  /* 5. 빈 페이지 방지 (잘 되는 거니까 유지) */
   .page, .chess-report-page {
     page-break-after: always !important;
     break-after: page !important;
