@@ -3697,3 +3697,44 @@ body:has(.bulk-page-wide) select,
 body:has(.bulk-page-wide) textarea {
   max-width: 100% !important;
 }
+/* ===== 인쇄 시 사이드 배경색 및 빈 페이지 정밀 제어 ===== */
+
+@media print {
+  /* 1. 사이드 그라데이션 배경만 제거 (디자인/위치는 유지) */
+  html, body, .wrap, #app {
+    background: #ffffff !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 2. 단체 입력 시 각 성적표 뒤의 빈 페이지 방지 */
+  .page, .chess-report-page {
+    /* 페이지 넘김은 유지하되, 마지막 장 뒤에는 빈 페이지가 안 생기도록 함 */
+    page-break-after: always !important;
+    break-after: page !important;
+    /* 높이가 100%를 초과하여 빈 페이지가 생기는 것을 방지 */
+    min-height: 0 !important;
+  }
+
+  /* 마지막 성적표 요소 뒤에는 절대 페이지를 넘기지 않음 */
+  .page:last-child, 
+  .chess-report-page:last-child,
+  .page:last-of-type,
+  .chess-report-page:last-of-type {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* 3. 인쇄 시 불필요한 버튼 숨기기 */
+  .no-print, .sticky-actions, .top-bar, button {
+    display: none !important;
+  }
+}
+
+/* 용지 설정 (여백은 브라우저 기본값에 맡겨 디자인 틀어짐 방지) */
+@page {
+  size: auto;
+  margin: 0;
+}
