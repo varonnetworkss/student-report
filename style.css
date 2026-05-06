@@ -3660,62 +3660,70 @@ html,
 body {
   overflow-x: hidden !important;
 }
-/* ===== 행님 전용: 사이드 색상 + 스크롤바 + 위치(중앙) 완벽 해결 ===== */
+/* ===== 행님, 일반/단체 입력 통합 인쇄 최적화 (빈 페이지+사이드색 제거) ===== */
 
 @media print {
-  /* 1. 사이드 그라데이션 색깔 완전 박멸 */
+  /* 1. 사이드 배경색 & 스크롤바 완전 제거 */
   html, body, .wrap, #app, .chess-report-root {
     background: #ffffff !important;
-    background-image: none !important; /* 끈질긴 그라데이션 제거 */
-    background-color: #ffffff !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  /* 2. 좆같은 스크롤바 인쇄 안 되게 차단 */
-  html, body, .wrap, #app, div {
+    background-image: none !important;
     overflow: visible !important;
     height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* 3. 성적표 위치: 맨 앞장이 너무 위로 안 붙게 중간으로 내림 */
-  .page, .chess-report-page {
-    /* 위아래 여백을 80px로 늘려서 중간쯤으로 보이게 조절했어 */
-    margin: 80px auto !important; 
-    background: #ffffff !important;
-    border: none !important;
-    box-shadow: none !important;
-    display: block !important;
-    position: relative !important;
-    width: 210mm !important; /* A4 폭 고정 */
-  }
-
-  /* 4. 내부 색상(그래프 등)은 무조건 유지 */
+  /* 2. 내부 디자인 색상 유지 */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 5. 단체 입력 시 겹침 방지 */
+  /* 3. 성적표 위치 및 겹침 방지 */
   .wrap {
     display: block !important;
     width: 100% !important;
   }
 
-  /* 6. 빈 페이지 방지 (잘 되는 거 유지) */
-  .page:last-child, .chess-report-page:last-child {
+  /* 4. 성적표 본체: 한 페이지에 딱 들어오게 설정 */
+  .page, .chess-report-page {
+    /* 위아래 여백을 줘서 중간에 오게 하되, 페이지를 넘기지 않을 만큼만 */
+    margin: 40px auto !important; 
+    padding: 20px !important;
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: block !important;
+    width: 210mm !important;
+    
+    /* 높이가 너무 길어서 다음 장으로 넘어가는 거 방지 */
+    height: auto !important;
+    max-height: 280mm !important; 
+    overflow: hidden !important; /* 내용이 넘쳐서 빈 페이지 생기는 거 차단 */
+    
+    /* 페이지 넘김 설정 */
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* 5. 마지막 페이지 빈 종이 방지 (행님이 말한 빈 페이지 핵심 해결) */
+  .page:last-child, 
+  .chess-report-page:last-child,
+  .page:last-of-type,
+  .chess-report-page:last-of-type {
     page-break-after: avoid !important;
     break-after: avoid !important;
     margin-bottom: 0 !important;
   }
 
-  /* 7. 인쇄 시 버튼 숨기기 */
+  /* 6. 인쇄 시 버튼 숨기기 */
   .no-print, .sticky-actions, .top-bar, button {
     display: none !important;
   }
 }
 
 @page {
-  size: auto;
+  size: A4;
   margin: 0;
 }
