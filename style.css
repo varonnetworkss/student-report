@@ -3697,3 +3697,62 @@ body:has(.bulk-page-wide) select,
 body:has(.bulk-page-wide) textarea {
   max-width: 100% !important;
 }
+/* ===== [최종] 성적표 인쇄: 배경색/테두리/빈페이지 완벽 제거 ===== */
+
+@media print {
+  /* 1. 내부 그래프 및 색상은 100% 유지 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 2. 사진에 나오는 분홍색/회색 배경과 테두리를 강제로 '흰색'으로 */
+  html, body, .wrap, #app, .chess-report-root {
+    background: #ffffff !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* 3. 성적표 본체(흰 종이 부분) 설정 */
+  .page, .chess-report-page {
+    background: #ffffff !important; /* 성적표 배경을 회색에서 흰색으로 */
+    border: none !important;      /* 좆같은 바깥 테두리 제거 */
+    box-shadow: none !important;   /* 바깥 그림자 제거 */
+    
+    /* 기존 디자인의 안쪽 여백은 건드리지 않음 */
+    min-height: 0 !important;      /* 빈 페이지가 생기는 핵심 원인 제거 */
+    height: auto !important;
+    
+    margin: 0 auto !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  /* 4. 마지막 성적표 뒤에 빈 종이 안 나오게 설정 */
+  .page:last-child, .chess-report-page:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* 5. 단체 입력 시 가로 짤림 방지 */
+  body:has(.bulk-page-wide) .wrap {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  /* 6. 인쇄 시 불필요한 버튼 숨기기 */
+  .no-print, .sticky-actions, .top-bar, button {
+    display: none !important;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
