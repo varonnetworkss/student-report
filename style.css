@@ -3660,57 +3660,94 @@ html,
 body {
   overflow-x: hidden !important;
 }
-/* ===== 행님, 초6 성적표 겹침 + 사이드 색상 + 위치 완벽 해결 ===== */
+/* ===== 단체입력 화면 폭 복구 최종 ===== */
+body:has(.bulk-page-wide) {
+  overflow-x: auto !important;
+}
+
+body:has(.bulk-page-wide) .wrap {
+  width: min(1500px, calc(100vw - 48px)) !important;
+  max-width: 1500px !important;
+  min-width: 1200px !important;
+  margin: 32px auto 80px !important;
+  display: block !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+}
+
+body:has(.bulk-page-wide) .bulk-page-wide {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+body:has(.bulk-page-wide) .bulk-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr) !important;
+  gap: 20px !important;
+  align-items: start !important;
+}
+
+body:has(.bulk-page-wide) table {
+  max-width: 100% !important;
+}
+
+body:has(.bulk-page-wide) input,
+body:has(.bulk-page-wide) select,
+body:has(.bulk-page-wide) textarea {
+  max-width: 100% !important;
+}
+/* ===== 행님 전용: 그라데이션 박멸 + 빈 페이지 차단 최종본 ===== */
 
 @media print {
-  /* 1. 사이드 그라데이션 및 모든 배경색 흰색으로 강제 (행님 배경색 안 빼도 돼) */
+  /* 1. 사이드 그라데이션 및 모든 배경색 강제로 하얗게 밀기 */
   html, body, .wrap, #app, [class*="root"] {
     background: #ffffff !important;
-    background-image: none !important;
+    background-image: none !important; /* 그라데이션 죽이는 핵심 */
+    background-color: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
     margin: 0 !important;
     padding: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    display: block !important; /* 겹침 방지를 위해 Flex 해제 */
   }
 
-  /* 2. 내부 모든 색상(그래프, 강조색) 유지 */
+  /* 2. 내부 그래프나 강조색은 행님이 만든 그대로 나오게 함 */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 3. 성적표 본체: 위치 잡고 안 잘리게 설정 */
-  .page, .chess-report-page {
-    background: #ffffff !important;
-    border: none !important;
-    box-shadow: none !important;
-    
-    /* 위치: 너무 위로 안 붙게 상단 여백 주고 가로 중앙 정렬 */
-    margin: 50px auto !important; 
-    width: 210mm !important; /* A4 폭 고정 */
-    
-    /* 초6처럼 내용 긴 경우를 위해 높이 제한 해제 */
-    height: auto !important;
-    min-height: 280mm !important;
-    padding: 20px !important;
-    box-sizing: border-box !important;
-    
-    /* 페이지 넘김 설정 */
+  /* 3. 단체 입력 시 성적표 겹침 방지 및 위치 고정 */
+  .wrap {
     display: block !important;
-    page-break-after: always !important;
-    break-after: page !important;
-    page-break-inside: auto !important; /* 내용 길면 자연스럽게 다음 장으로 */
+    width: 100% !important;
   }
 
-  /* 4. 마지막 페이지 뒤 빈 종이 절대 방지 */
-  .page:last-child, .chess-report-page:last-child {
+  .page, .chess-report-page {
+    background: #ffffff !important;
+    margin: 30px auto !important; /* 너무 위로 안 붙게 살짝 여백 */
+    width: 210mm !important;
+    height: auto !important;
+    display: block !important;
+    position: relative !important;
+    
+    /* 페이지 넘김 설정 */
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* 4. [핵심] 마지막 성적표 뒤에 빈 페이지 절대 안 나오게 차단 */
+  .page:last-child, 
+  .chess-report-page:last-child,
+  .page:last-of-type,
+  .chess-report-page:last-of-type {
     page-break-after: avoid !important;
     break-after: avoid !important;
     margin-bottom: 0 !important;
   }
 
-  /* 5. 인쇄 시 불필요한 UI 숨기기 */
+  /* 5. 인쇄 시 불필요한 버튼들 숨기기 */
   .no-print, .sticky-actions, .top-bar, button {
     display: none !important;
   }
