@@ -3660,54 +3660,56 @@ html,
 body {
   overflow-x: hidden !important;
 }
-/* ===== 행님, 이번엔 진짜 딱 두 개만 잡아. 딴 거 안 건드려. ===== */
+/* ===== 행님 전용: 사이드 색상 + 스크롤바 + 위치(중앙) 완벽 해결 ===== */
 
 @media print {
-  /* 1. 사이드에 나오는 좆같은 그라데이션 색깔 삭제 */
+  /* 1. 사이드 그라데이션 색깔 완전 박멸 */
   html, body, .wrap, #app, .chess-report-root {
     background: #ffffff !important;
-    background-image: none !important; /* 이게 색깔 빼는 핵심이야 */
+    background-image: none !important; /* 끈질긴 그라데이션 제거 */
     background-color: #ffffff !important;
     border: none !important;
     box-shadow: none !important;
   }
 
-  /* 2. 겹침 방지: 행님이 만든 원래 레이아웃(Block) 그대로 둠 */
-  .wrap {
-    display: block !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  /* 2. 좆같은 스크롤바 인쇄 안 되게 차단 */
+  html, body, .wrap, #app, div {
+    overflow: visible !important;
+    height: auto !important;
   }
 
-  /* 3. 성적표 중앙 정렬: 위치 안 변하게 마진으로만 처리 */
+  /* 3. 성적표 위치: 맨 앞장이 너무 위로 안 붙게 중간으로 내림 */
   .page, .chess-report-page {
-    margin: 20px auto !important; /* 위아래 여백 주고 가로 중앙 */
+    /* 위아래 여백을 80px로 늘려서 중간쯤으로 보이게 조절했어 */
+    margin: 80px auto !important; 
     background: #ffffff !important;
-    border: none !important;     /* 테두리 색깔 나오면 이것도 지워야 함 */
-    box-shadow: none !important;  /* 그림자도 지워버려 */
+    border: none !important;
+    box-shadow: none !important;
     display: block !important;
     position: relative !important;
+    width: 210mm !important; /* A4 폭 고정 */
   }
 
-  /* 4. 내부 색상(그래프 등) 유지 */
+  /* 4. 내부 색상(그래프 등)은 무조건 유지 */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 5. 빈 페이지 방지 (잘 되는 거니까 유지) */
-  .page, .chess-report-page {
-    page-break-after: always !important;
-    break-after: page !important;
-    min-height: 0 !important;
+  /* 5. 단체 입력 시 겹침 방지 */
+  .wrap {
+    display: block !important;
+    width: 100% !important;
   }
+
+  /* 6. 빈 페이지 방지 (잘 되는 거 유지) */
   .page:last-child, .chess-report-page:last-child {
     page-break-after: avoid !important;
     break-after: avoid !important;
+    margin-bottom: 0 !important;
   }
 
-  /* 6. 인쇄 시 버튼 숨기기 */
+  /* 7. 인쇄 시 버튼 숨기기 */
   .no-print, .sticky-actions, .top-bar, button {
     display: none !important;
   }
