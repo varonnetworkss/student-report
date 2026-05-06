@@ -3790,3 +3790,57 @@ body:has(.bulk-page-wide) textarea {
   size: auto;
   margin: 0;
 }
+/* ===== 행님, 이번엔 진짜 사이드 색상이랑 겹침만 해결함 ===== */
+
+@media print {
+  /* 1. 사이드 색상(그라데이션) 무조건 흰색으로 밀어버리기 */
+  html, body, .wrap, #app, .chess-report-root {
+    background: #ffffff !important;
+    background-image: none !important; /* 그라데이션 제거 핵심 */
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 2. 겹침 현상 방지: 내가 준 flex 코드 다 빼고 기본으로 돌림 */
+  .wrap {
+    display: block !important; /* 겹치지 않게 한 줄씩 나오게 함 */
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 3. 성적표 위치: 행님이 만든 디자인 그대로 유지 (중앙 정렬은 마진으로 처리) */
+  .page, .chess-report-page {
+    margin: 0 auto !important; /* 가로 중앙 정렬 */
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 4. 내부 색상은 그대로 (그래프 등) */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 5. 빈 페이지 방지 (잘 되는 거 유지) */
+  .page, .chess-report-page {
+    page-break-after: always !important;
+    break-after: page !important;
+    min-height: 0 !important;
+  }
+  .page:last-child, .chess-report-page:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  /* 6. 인쇄 시 버튼 숨기기 */
+  .no-print, .sticky-actions, .top-bar, button {
+    display: none !important;
+  }
+}
+
+@page {
+  size: auto;
+  margin: 0;
+}
