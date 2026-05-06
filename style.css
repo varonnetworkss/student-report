@@ -3697,64 +3697,68 @@ body:has(.bulk-page-wide) select,
 body:has(.bulk-page-wide) textarea {
   max-width: 100% !important;
 }
-/* ===== 행님 전용: 그라데이션 박멸 + 빈 페이지 차단 최종본 ===== */
+/* ===== 행님 전용: 화면 그라데이션 삭제 + 인쇄 빈 페이지 차단 통합본 ===== */
 
-@media print {
-  /* 1. 사이드 그라데이션 및 모든 배경색 강제로 하얗게 밀기 */
-  html, body, .wrap, #app, [class*="root"] {
-    background: #ffffff !important;
-    background-image: none !important; /* 그라데이션 죽이는 핵심 */
-    background-color: #ffffff !important;
-    border: none !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  /* 2. 내부 그래프나 강조색은 행님이 만든 그대로 나오게 함 */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* 3. 단체 입력 시 성적표 겹침 방지 및 위치 고정 */
-  .wrap {
-    display: block !important;
-    width: 100% !important;
-  }
-
-  .page, .chess-report-page {
-    background: #ffffff !important;
-    margin: 30px auto !important; /* 너무 위로 안 붙게 살짝 여백 */
-    width: 210mm !important;
-    height: auto !important;
-    display: block !important;
-    position: relative !important;
-    
-    /* 페이지 넘김 설정 */
-    page-break-after: always !important;
-    break-after: page !important;
-    page-break-inside: avoid !important;
-  }
-
-  /* 4. [핵심] 마지막 성적표 뒤에 빈 페이지 절대 안 나오게 차단 */
-  .page:last-child, 
-  .chess-report-page:last-child,
-  .page:last-of-type,
-  .chess-report-page:last-of-type {
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-    margin-bottom: 0 !important;
-  }
-
-  /* 5. 인쇄 시 불필요한 버튼들 숨기기 */
-  .no-print, .sticky-actions, .top-bar, button {
-    display: none !important;
-  }
+/* 1. 웹 화면 설정: 그라데이션 삭제하고 하얀색으로 변경 */
+.wrap {
+    min-height: 100vh;
+    background: #ffffff !important; /* 여기서 그라데이션을 하얀색으로 바꿨어 */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-/* 용지 설정 */
+/* 2. 인쇄 전용 설정 */
+@media print {
+    /* 사이드 배경 및 스크롤바 완전 제거 */
+    html, body, .wrap, #app {
+        background: #ffffff !important;
+        background-image: none !important;
+        overflow: visible !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* 내부 색상(그래프 등) 유지 */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* 성적표 본체 설정 */
+    .page, .chess-report-page {
+        margin: 20px auto !important;
+        background: #ffffff !important;
+        border: none !important;
+        box-shadow: none !important;
+        display: block !important;
+        width: 210mm !important;
+        height: auto !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* [핵심] 단체 입력 시 마지막 페이지 빈 종이 방지 */
+    .page:last-child, 
+    .chess-report-page:last-child,
+    .page:last-of-type,
+    .chess-report-page:last-of-type {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* 인쇄 시 버튼 숨기기 */
+    .no-print, .sticky-actions, .top-bar, button {
+        display: none !important;
+    }
+}
+
 @page {
-  size: A4;
-  margin: 0;
+    size: auto;
+    margin: 0;
 }
