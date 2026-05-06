@@ -3555,7 +3555,7 @@ body.modal-open {
   width: 100%;
   min-height: 100vh;
   /* 여기에 원하는 그라데이션을 넣으세요 */
-  background: linear-gradient(135deg, #cfe8ff 0%, #fff0f8 50%, #ffd9ea 100%) !important;
+  background:#ffffff !important;
   display: flex;
   justify-content: center;
   align-items: center;
