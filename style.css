@@ -26,7 +26,7 @@ body {
 }
 
 body {
-  background:linear-gradient(180deg,#eef3f9,#e9eef6);
+  background:#ffffff;
   color:var(--ink);
 }
 
@@ -327,15 +327,14 @@ button.ghost {
   margin:22px auto 0;
   width:min(210mm,100%);
   max-width:210mm;
-  break-after:page;
-  page-break-after:always;
-}
-
-.page:last-child {
-  break-after:auto;
+ break-after:auto;
   page-break-after:auto;
 }
 
+.page:not(:last-child) {
+  break-after:page;
+  page-break-after:always;
+}
 .page + .page {
   margin-top:24px;
 }
@@ -2468,10 +2467,7 @@ html{
 
 body{
   margin:0;
-  background:
-    radial-gradient(circle at top left, rgba(96,165,250,0.12), transparent 28%),
-    radial-gradient(circle at top right, rgba(37,99,235,0.08), transparent 24%),
-    linear-gradient(180deg, #f8fbff 0%, #f3f7fc 100%);
+  background:#ffffff;
   color:var(--text);
   font-family:"Pretendard","Noto Sans KR",sans-serif;
   line-height:1.5;
@@ -3696,69 +3692,4 @@ body:has(.bulk-page-wide) input,
 body:has(.bulk-page-wide) select,
 body:has(.bulk-page-wide) textarea {
   max-width: 100% !important;
-}
-/* ===== 행님 전용: 화면 그라데이션 삭제 + 인쇄 빈 페이지 차단 통합본 ===== */
-
-/* 1. 웹 화면 설정: 그라데이션 삭제하고 하얀색으로 변경 */
-.wrap {
-    min-height: 100vh;
-    background: #ffffff !important; /* 여기서 그라데이션을 하얀색으로 바꿨어 */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* 2. 인쇄 전용 설정 */
-@media print {
-    /* 사이드 배경 및 스크롤바 완전 제거 */
-    html, body, .wrap, #app {
-        background: #ffffff !important;
-        background-image: none !important;
-        overflow: visible !important;
-        height: auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* 내부 색상(그래프 등) 유지 */
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    /* 성적표 본체 설정 */
-    .page, .chess-report-page {
-        margin: 20px auto !important;
-        background: #ffffff !important;
-        border: none !important;
-        box-shadow: none !important;
-        display: block !important;
-        width: 210mm !important;
-        height: auto !important;
-        page-break-after: always !important;
-        break-after: page !important;
-        page-break-inside: avoid !important;
-    }
-
-    /* [핵심] 단체 입력 시 마지막 페이지 빈 종이 방지 */
-    .page:last-child, 
-    .chess-report-page:last-child,
-    .page:last-of-type,
-    .chess-report-page:last-of-type {
-        page-break-after: avoid !important;
-        break-after: avoid !important;
-        margin-bottom: 0 !important;
-    }
-
-    /* 인쇄 시 버튼 숨기기 */
-    .no-print, .sticky-actions, .top-bar, button {
-        display: none !important;
-    }
-}
-
-@page {
-    size: auto;
-    margin: 0;
 }
