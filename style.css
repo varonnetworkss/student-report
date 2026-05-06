@@ -3738,3 +3738,55 @@ body:has(.bulk-page-wide) textarea {
   size: auto;
   margin: 0;
 }
+/* ===== 행님 전용: 위치 보존 + 사이드 색상만 제거 ===== */
+
+@media print {
+  /* 1. 사이드 배경색(그라데이션)이랑 테두리 완전 박멸 */
+  html, body, .wrap, #app {
+    background: #ffffff !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* 2. 원래 위치(중앙 정렬) 그대로 유지 */
+  .wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    /* 인쇄 시에도 화면 높이를 꽉 채워서 중앙 정렬 작동하게 함 */
+    min-height: 100vh !important;
+  }
+
+  /* 3. 내부 색상은 행님이 만든 그대로 예쁘게 나오게 함 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 4. 빈 페이지 방지 (이미 잘 되는 거 유지) */
+  .page, .chess-report-page {
+    page-break-after: always !important;
+    break-after: page !important;
+    min-height: 0 !important;
+  }
+  .page:last-child, .chess-report-page:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* 5. 인쇄할 때 안 나와야 할 것들 */
+  .no-print, .sticky-actions, .top-bar, button {
+    display: none !important;
+  }
+}
+
+@page {
+  size: auto;
+  margin: 0;
+}
