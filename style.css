@@ -1517,7 +1517,7 @@ button.ghost {
   white-space: normal !important;
   word-break: keep-all !important;
 }
-
+}
 /* Translation detail 표도 유형 칸 넓히기 */
 .vt-summary-card .table-wrap:last-child table th:nth-child(1),
 .vt-summary-card .table-wrap:last-child table td:nth-child(1) {
@@ -1631,6 +1631,7 @@ button.ghost {
 }
 
 /* print에서도 동일 적용 */
+}
 @media print {
   .vt-summary-card > .table-wrap:first-of-type table th:nth-child(1),
   .vt-summary-card > .table-wrap:first-of-type table td:nth-child(1) {
@@ -1702,6 +1703,7 @@ button.ghost {
 }
 
 /* print에서도 동일 적용 */
+}
 @media print {
   .page .card:first-of-type table th:nth-child(1),
   .page .card:first-of-type table td:nth-child(1) {
@@ -1733,6 +1735,7 @@ button.ghost {
 /* =========================
    PRINT REAL FIX (핵심)
    ========================= */
+}
 
 @media print {
 
@@ -1779,6 +1782,7 @@ button.ghost {
 /* =========================
    PRINT HARD FIX (최종)
    ========================= */
+}
 
 @media print {
 
@@ -1834,6 +1838,7 @@ button.ghost {
 /* =========================
    PRINT SCALE FIX (핵심중핵)
    ========================= */
+}
 
 @media print {
 
@@ -1861,6 +1866,7 @@ button.ghost {
 /* =========================
    PRINT SCALE FIX (핵심중핵)
    ========================= */
+}
 
 @media print {
 
@@ -1919,6 +1925,7 @@ button.ghost {
 }
 
 /* 인쇄 */
+}
 @media print {
   .vt-vocab-card .table-wrap {
     overflow: visible !important;
@@ -2927,6 +2934,7 @@ table{
     padding-top:0;
   }
 }
+}
 
 @media print{
   body{
@@ -3693,3 +3701,4 @@ body:has(.bulk-page-wide) select,
 body:has(.bulk-page-wide) textarea {
   max-width: 100% !important;
 }
+
