@@ -792,9 +792,16 @@ function renderBulkResultPanel() {
             <span>${esc(item.grade || "-")}</span>
           </div>
 
-          <div class="bulk-result-side">
+                    <div class="bulk-result-side">
             <span class="bulk-badge">총점 ${esc(String(item.totalScore))}</span>
-            <span class="bulk-badge">레벨 ${esc(String(item.assignedLevel))}</span>
+            <span class="bulk-badge">레벨
+              <select onchange="bulkOverrideLevel('${item._bulkId}', this.value)"
+                style="font-size:13px; font-weight:700; border:none; background:transparent; color:inherit; cursor:pointer;">
+                ${getLevelOptions(item.grade, item.examName).map(lv =>
+                  `<option value="${lv}" ${lv === item.assignedLevel ? "selected" : ""}>${lv}</option>`
+                ).join("")}
+              </select>
+            </span>
             <button type="button" onclick="openBulkResultReport('${item._bulkId}')">성적표</button>
           </div>
         </div>
@@ -1044,4 +1051,9 @@ function bulkRenderAceReportForPrint(target) {
       }, 100);
     }, 0);
   });
+}
+function bulkOverrideLevel(bulkId, newLevel) {
+  const target = CHESS_BULK_RESULTS.find(item => item._bulkId === bulkId);
+  if (!target) return;
+  target.assignedLevel = newLevel;
 }
