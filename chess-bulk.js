@@ -778,10 +778,13 @@ function renderBulkResultPanel() {
   }
 
   return `
-    <div class="bulk-result-head">
-      <div class="bulk-table-title">채점 결과</div>
-      <div class="muted">${CHESS_BULK_RESULTS.length}명</div>
-    </div>
+   <div class="bulk-result-head">
+  <div class="bulk-table-title">채점 결과</div>
+  <div style="display:flex; gap:10px; align-items:center;">
+    <div class="muted">${CHESS_BULK_RESULTS.length}명</div>
+    <button type="button" onclick="printAllBulkReports()">전체 성적표 출력</button>
+  </div>
+</div>
 
     <div class="bulk-result-list">
       ${CHESS_BULK_RESULTS.map((item, idx) => `
@@ -913,4 +916,128 @@ function bulkApplyCommonSettings() {
   });
 
   renderChessBulkMode();
+}
+async function printAllBulkReports() {
+  if (!CHESS_BULK_RESULTS.length) {
+    alert("출력할 성적표가 없습니다.");
+    return;
+  }
+
+  const originalChessSession = LAST_CHESS_SESSION;
+  const reportHtmlList = [];
+
+  for (let i = 0; i < CHESS_BULK_RESULTS.length; i++) {
+    const item = CHESS_BULK_RESULTS[i];
+
+    if (item.resultType === "CHESS") {
+      LAST_CHESS_SESSION = item;
+      renderChessReport();
+
+      const root = document.querySelector(".chess-report-root");
+      if (root) {
+        reportHtmlList.push(`
+          <div class="bulk-print-one-report">
+            ${root.outerHTML}
+          </div>
+        `);
+      }
+    }
+
+    if (item.resultType === "ACE") {
+      await bulkRenderAceReportForPrint(item);
+
+      const reportArea = document.querySelector("#reportArea");
+      if (reportArea) {
+        reportHtmlList.push(`
+          <div class="bulk-print-one-report">
+            ${reportArea.outerHTML}
+          </div>
+        `);
+      }
+    }
+  }
+
+  LAST_CHESS_SESSION = originalChessSession;
+
+  app.classList.remove("bulk-app");
+  app.removeAttribute("style");
+
+  app.innerHTML = `
+    <div class="top-bar no-print sticky-actions">
+      <button class="secondary" onclick="renderChessBulkMode()">단체입력으로 돌아가기</button>
+      <button onclick="window.print()">전체 인쇄</button>
+    </div>
+
+    <div class="bulk-all-print-root">
+      ${reportHtmlList.join("")}
+    </div>
+  `;
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+
+function bulkRenderAceReportForPrint(target) {
+  return new Promise(resolve => {
+    const aceTitleMap = {
+      ACE_E6: "E6",
+      ACE_M1_G: "M1(일반형)",
+      ACE_M1_S: "M1(수능형)",
+      ACE_M2_G: "M2(일반형)",
+      ACE_M2_S: "M2(수능형)",
+      ACE_M3_G1: "M3(고1형)",
+      ACE_M3_G2: "M3(고2형)"
+    };
+
+    const title = aceTitleMap[target.examKey] || target.examName || "";
+    let examKey = title;
+
+    if (title === "M1(일반형)" || title === "M2(일반형)") {
+      examKey = "M1,M2(일반형)";
+    }
+
+    renderExamPage(
+      target.memberCode || "",
+      target.name || "",
+      target.school || "",
+      target.grade || "",
+      target.testDate || "",
+      title,
+      examKey
+    );
+
+    setTimeout(() => {
+      (target.obj || []).forEach((val, idx) => {
+        const el = document.getElementById(`q-${idx + 1}`);
+        if (el) el.value = val;
+      });
+
+      (target.vocab || []).forEach((val, idx) => {
+        const el = document.getElementById(`vocab-${idx + 1}`);
+        if (el) el.value = val;
+      });
+
+      (target.trans || []).forEach((val, idx) => {
+        const el1 = document.getElementById(`trans-${idx + 1}`);
+        const el2 = document.getElementById(`translation-${idx + 1}`);
+        const el3 = document.getElementById(`t-${idx + 1}`);
+
+        if (el1) el1.value = val;
+        if (el2) el2.value = val;
+        if (el3) el3.value = val;
+      });
+
+      checkExam(
+        target.memberCode || "",
+        target.name || "",
+        target.school || "",
+        target.grade || "",
+        target.testDate || "",
+        title,
+        examKey
+      );
+
+      setTimeout(resolve, 100);
+    }, 0);
+  });
 }
