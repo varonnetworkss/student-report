@@ -2245,12 +2245,22 @@ function evaluateVTExam() {
   };
   vocabTotal.rate = percent(vocabTotal.earned, vocabTotal.possible);
 
-  const transResults = TRANS_ITEMS.map(item => {
-    const raw = (document.getElementById(`trans-score-${item.no}`)?.value || "0").trim();
-    const earned = Math.max(0, Math.min(item.max, Number(raw) || 0));
-    const rate = percent(earned, item.max);
-    return { ...item, earned, rate };
-  });
+ const transResults = TRANS_ITEMS.map(item => {
+  const raw = (document.getElementById(`trans-score-${item.no}`)?.value || "0").trim();
+  const score = Number(raw);
+
+  if (raw === "" || Number.isNaN(score)) {
+    throw new Error(`${item.no}번 해석 점수를 입력해 주세요.`);
+  }
+
+  if (score < 0 || score > item.max) {
+    throw new Error(`${item.no}번 해석 점수는 0~${item.max}점 사이로 입력해야 합니다.`);
+  }
+
+  const earned = score;
+  const rate = percent(earned, item.max);
+  return { ...item, earned, rate };
+});
 
   return {
     vocabResults,
@@ -2259,7 +2269,24 @@ function evaluateVTExam() {
     transResults
   };
 }
+function validateTransScoreInput(input, max) {
+  const raw = String(input.value || "").trim();
 
+  input.setCustomValidity("");
+
+  if (raw === "") return;
+
+  const score = Number(raw);
+
+  if (Number.isNaN(score) || score < 0 || score > max) {
+    input.setCustomValidity(`0~${max}점 사이로 입력해 주세요.`);
+    input.reportValidity();
+    input.classList.add("input-error");
+    return;
+  }
+
+  input.classList.remove("input-error");
+}
 function renderVTExamPage(memberCode, name, school, grade, testDate, title, vtState = null) {
   if (typeof VOCAB_ITEMS === "undefined" || typeof TRANS_ITEMS === "undefined") {
     alert("VOCAB_ITEMS / TRANS_ITEMS 데이터가 없습니다.");
@@ -2290,7 +2317,7 @@ function renderVTExamPage(memberCode, name, school, grade, testDate, title, vtSt
           <input id="trans-score-${item.no}" type="number" min="0" max="${item.max}" step="1"
             style="max-width:180px;"
             value="${esc(scoreVal)}"
-            oninput="this.value = Math.max(0, Math.min(${item.max}, Number(this.value) || 0));"
+            oninput="validateTransScoreInput(this, ${item.max})"
             onkeydown="moveScoreSelect(event,${item.no},${TRANS_ITEMS.length})">
           <div class="answer-meta">0 ~ ${item.max}점 입력</div>
         </div>
@@ -2367,6 +2394,7 @@ function checkVTExam(memberCode, name, school, grade, testDate, title) {
   VOCAB_ITEMS.forEach(item => {
     vocabAnswers[item.no] = document.getElementById(`vocab-${item.no}`)?.value || '';
   });
+
   const transScores = {};
   TRANS_ITEMS.forEach(item => {
     transScores[item.no] = document.getElementById(`trans-score-${item.no}`)?.value || '0';
@@ -2375,7 +2403,15 @@ function checkVTExam(memberCode, name, school, grade, testDate, title) {
   const vtState = { vocabAnswers, transScores };
   LAST_VT_SESSION = { memberCode, name, school, grade, testDate, title, vtState };
 
-  const vtEvaluation = evaluateVTExam();
+  let vtEvaluation;
+
+  try {
+    vtEvaluation = evaluateVTExam();
+  } catch (err) {
+    alert(err.message || "해석 점수를 확인해 주세요.");
+    return;
+  }
+
   app.innerHTML = `
     <div class="top-bar no-print sticky-actions">
       <button class="secondary" onclick="restoreVTInput()">답안입력으로 돌아가기</button>
@@ -2386,6 +2422,7 @@ function checkVTExam(memberCode, name, school, grade, testDate, title) {
       ${renderSimpleVTReport(memberCode, name, school, grade, testDate, title, vtEvaluation)}
     </div>
   `;
+
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
