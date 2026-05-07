@@ -2279,6 +2279,22 @@ function evaluateVTExam() {
   };
 }
 
+  });
+
+  const transTotal    = transResults.reduce((sum, item) => sum + item.earned, 0);
+  const transPossible = transResults.reduce((sum, item) => sum + item.max,    0);
+
+  return {
+    vocabResults,
+    vocabGroups,
+    vocabTotal,
+    vocabPossible: vocabTotal.possible,
+    transResults,
+    transTotal,
+    transPossible
+  };
+}
+
 function validateTransScoreInput(input, max) {
   const raw = String(input.value || "").trim();
 
@@ -2293,9 +2309,6 @@ function validateTransScoreInput(input, max) {
   }
 }
 
-
-  input.classList.remove("input-error");
-}
 function renderVTExamPage(memberCode, name, school, grade, testDate, title, vtState = null) {
   if (typeof VOCAB_ITEMS === "undefined" || typeof TRANS_ITEMS === "undefined") {
     alert("VOCAB_ITEMS / TRANS_ITEMS 데이터가 없습니다.");
