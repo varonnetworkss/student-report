@@ -2873,6 +2873,34 @@ function getLevelOptions(grade, examName) {
   const g = String(grade || "").replace(/\s/g, "");
   const e = String(examName || "").replace(/\s/g, "");
 
+  // CHESS 시험인 경우 — CHESS_LEVEL_RULES 기준 레벨 목록
+  const chessMap = {
+    "CHESSD1": ["IS", "DSA", "DSB"],
+    "CHESSD2": ["IS", "DSA", "DSB", "DSC"],
+    "CHESSD3": ["DSB", "DSC", "DSD"],
+    "CHESSD4": ["DSC", "DSD", "LSA"],
+    "CHESSL1": ["DSD", "LSA", "LSB"],
+    "CHESSL2": ["LSA", "LSB", "LSC"],
+    "CHESSL3": ["LSB", "LSC", "LSD"],
+    "CHESSL4": ["LSC", "LSD", "MSA"],
+    // examName이 "D1", "L2" 형태로 올 때도 대응
+    "D1": ["IS", "DSA", "DSB"],
+    "D2": ["IS", "DSA", "DSB", "DSC"],
+    "D3": ["DSB", "DSC", "DSD"],
+    "D4": ["DSC", "DSD", "LSA"],
+    "L1": ["DSD", "LSA", "LSB"],
+    "L2": ["LSA", "LSB", "LSC"],
+    "L3": ["LSB", "LSC", "LSD"],
+    "L4": ["LSC", "LSD", "MSA"]
+  };
+
+  // 공백 제거 후 대문자로 비교
+  const chessKey = e.replace(/\s/g, "").toUpperCase();
+  if (chessMap[chessKey]) {
+    return ["미배정", "interview", ...chessMap[chessKey]];
+  }
+
+  // ACE 시험 — 학년 기준
   let levels = [];
 
   if (g === "초등6" || g === "초6" || ((g === "초등5" || g === "초5") && e === "E6")) {
@@ -2899,6 +2927,7 @@ function getLevelOptions(grade, examName) {
 
   return ["미배정", ...levels];
 }
+
 
 function buildCoverPage(memberCode, name, school, grade, testDate, title, introText) {
   return `
