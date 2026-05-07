@@ -3852,3 +3852,32 @@ body:has(.bulk-page-wide) textarea {
     page-break-inside: auto !important;
   }
 }
+@media print {
+  .bulk-all-print-root {
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .bulk-print-one-report {
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  .bulk-print-one-report:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  .bulk-print-one-report .top-bar,
+  .bulk-print-one-report .sticky-actions,
+  .bulk-print-one-report .no-print,
+  .bulk-print-one-report button {
+    display: none !important;
+  }
+}
