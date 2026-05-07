@@ -716,15 +716,11 @@ function openBulkAceResultReport(bulkId) {
       if (el) el.value = val;
     });
 
-    (target.trans || []).forEach((val, idx) => {
-      const el1 = document.getElementById(`trans-${idx + 1}`);
-      const el2 = document.getElementById(`translation-${idx + 1}`);
-      const el3 = document.getElementById(`t-${idx + 1}`);
-
-      if (el1) el1.value = val;
-      if (el2) el2.value = val;
-      if (el3) el3.value = val;
+       (target.trans || []).forEach((val, idx) => {
+      const el = document.getElementById(`trans-score-${idx + 1}`);
+      if (el) el.value = val;
     });
+
 
   console.log("ACE title:", title);
   console.log("q1:", document.getElementById("q-1")?.value);
@@ -1017,15 +1013,11 @@ function bulkRenderAceReportForPrint(target) {
         if (el) el.value = val;
       });
 
-      (target.trans || []).forEach((val, idx) => {
-        const el1 = document.getElementById(`trans-${idx + 1}`);
-        const el2 = document.getElementById(`translation-${idx + 1}`);
-        const el3 = document.getElementById(`t-${idx + 1}`);
-
-        if (el1) el1.value = val;
-        if (el2) el2.value = val;
-        if (el3) el3.value = val;
+           (target.trans || []).forEach((val, idx) => {
+        const el = document.getElementById(`trans-score-${idx + 1}`);
+        if (el) el.value = val;
       });
+
 
       checkExam(
         target.memberCode || "",
