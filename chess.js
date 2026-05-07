@@ -1440,6 +1440,9 @@ const writingSection = writingCards ? `
 
 ${grammarSection}
 ${writingSection}
+
+      </div>
+    </div>
   `;
 
   window.scrollTo({ top: 0, behavior: "smooth" });
