@@ -2544,20 +2544,25 @@ const interviewResult = collectChessInterviewResult(title, examKey);
   let vtState = null;
   let vtEvaluation = null;
 
-  if ((grade === "초등6" || grade === "중등1") && typeof VOCAB_ITEMS !== "undefined" && typeof TRANS_ITEMS !== "undefined") {
-    const vocabAnswers = {};
-    VOCAB_ITEMS.forEach(item => {
-      vocabAnswers[item.no] = document.getElementById(`vocab-${item.no}`)?.value || '';
-    });
+ if (
+  (grade === "초등6" || grade === "중등1") &&
+  typeof VOCAB_ITEMS !== "undefined" &&
+  typeof TRANS_ITEMS !== "undefined" &&
+  document.getElementById("trans-score-1")
+) {
+  const vocabAnswers = {};
+  VOCAB_ITEMS.forEach(item => {
+    vocabAnswers[item.no] = document.getElementById(`vocab-${item.no}`)?.value || '';
+  });
 
-    const transScores = {};
-    TRANS_ITEMS.forEach(item => {
-      transScores[item.no] = document.getElementById(`trans-score-${item.no}`)?.value || '0';
-    });
+  const transScores = {};
+  TRANS_ITEMS.forEach(item => {
+    transScores[item.no] = document.getElementById(`trans-score-${item.no}`)?.value || '0';
+  });
 
-    vtState = { vocabAnswers, transScores };
-    vtEvaluation = evaluateVTExam();
-  }
+  vtState = { vocabAnswers, transScores };
+  vtEvaluation = evaluateVTExam();
+}
 
 const evaluation = evaluateExam(examData);
 const reportGrade = getReportGradeForExam(grade, title);
@@ -2638,9 +2643,13 @@ const assignedLevel = getAssignedLevel(reportGrade, title, evaluation.total, tes
 
 let vtEvaluation = null;
 
-  if ((grade === "초등6" || grade === "중등1") && typeof evaluateVTExam === "function") {
-    vtEvaluation = evaluateVTExam();
-  }
+  if (
+  (grade === "초등6" || grade === "중등1") &&
+  typeof evaluateVTExam === "function" &&
+  document.getElementById("trans-score-1")
+) {
+  vtEvaluation = evaluateVTExam();
+}
 
   renderReportScreen(memberCode, name, school, grade, testDate, title, examKey, evaluation, vtEvaluation, assignedLevel);
 }
