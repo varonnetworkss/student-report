@@ -810,7 +810,32 @@ function openBulkResultReport(bulkId) {
 
   if (target.resultType === "CHESS") {
     LAST_CHESS_SESSION = target;
+
+    // 체스 성적표 렌더
     renderChessReport();
+
+    // 렌더 후 빈 page 제거
+    setTimeout(() => {
+      document.querySelectorAll(".page").forEach(page => {
+        const text = page.innerText.replace(/\s/g, "");
+        const hasImg = page.querySelector("img, svg, canvas, table");
+        const hasCard = page.querySelector(".report-card, .chess-section, .card");
+
+        if (!text && !hasImg && !hasCard) {
+          page.remove();
+        }
+      });
+
+      // 마지막 페이지 강제 넘김 제거
+      const pages = document.querySelectorAll(".page");
+      pages.forEach((page, idx) => {
+        if (idx === pages.length - 1) {
+          page.style.breakAfter = "auto";
+          page.style.pageBreakAfter = "auto";
+        }
+      });
+    }, 50);
+
     return;
   }
 
