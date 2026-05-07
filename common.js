@@ -2875,23 +2875,23 @@ function getLevelOptions(grade, examName) {
 
   // CHESS 시험인 경우 — CHESS_LEVEL_RULES 기준 레벨 목록
   const chessMap = {
-    "CHESSD1": ["IS", "DSA", "DSB"],
-    "CHESSD2": ["IS", "DSA", "DSB", "DSC"],
-    "CHESSD3": ["DSB", "DSC", "DSD"],
-    "CHESSD4": ["DSC", "DSD", "LSA"],
-    "CHESSL1": ["DSD", "LSA", "LSB"],
-    "CHESSL2": ["LSA", "LSB", "LSC"],
-    "CHESSL3": ["LSB", "LSC", "LSD"],
-    "CHESSL4": ["LSC", "LSD", "MSA"],
+    "CHESSD1": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "CHESSD2": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "CHESSD3": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "CHESSD4": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "CHESSL1": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "CHESSL2": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "CHESSL3": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "CHESSL4": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
     // examName이 "D1", "L2" 형태로 올 때도 대응
-    "D1": ["IS", "DSA", "DSB"],
-    "D2": ["IS", "DSA", "DSB", "DSC"],
-    "D3": ["DSB", "DSC", "DSD"],
-    "D4": ["DSC", "DSD", "LSA"],
-    "L1": ["DSD", "LSA", "LSB"],
-    "L2": ["LSA", "LSB", "LSC"],
-    "L3": ["LSB", "LSC", "LSD"],
-    "L4": ["LSC", "LSD", "MSA"]
+    "D1": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "D2": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "D3": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "D4": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "L1": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "L2": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "L3": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"],
+    "L4": ["IS", "DSA", "DSB","DSC", "DSD","LSA", "LSB", "LSC","LSD", "MSA"]
   };
 
   // 공백 제거 후 대문자로 비교
