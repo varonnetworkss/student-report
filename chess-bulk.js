@@ -650,9 +650,52 @@ function buildBulkChessResult(row) {
 function buildBulkAceResult(row) {
   const schema = bulkGetSchema(row.examKey);
 
-  const objectiveTotal = Array.isArray(row.obj) ? row.obj.filter(v => String(v).trim() !== "").length : 0;
-  const vocabTotal = Array.isArray(row.vocab) ? row.vocab.filter(v => String(v).trim() !== "").length : 0;
-  const transTotal = Array.isArray(row.trans) ? row.trans.filter(v => String(v).trim() !== "").length : 0;
+  // examKey → EXAMS 키 변환
+  const examsKeyMap = {
+    ACE_E6:    "E6",
+    ACE_M1_G:  "M1,M2(일반형)",
+    ACE_M1_S:  "M1(수능형)",
+    ACE_M2_G:  "M1,M2(일반형)",
+    ACE_M2_S:  "M2(수능형)",
+    ACE_M3_G1: "M3(고1형)",
+    ACE_M3_G2: "M3(고2형)"
+  };
+
+  // examKey → getAssignedLevel에 넘길 title 변환
+  const titleMap = {
+    ACE_E6:    "E6",
+    ACE_M1_G:  "M1(일반형)",
+    ACE_M1_S:  "M1(수능형)",
+    ACE_M2_G:  "M2(일반형)",
+    ACE_M2_S:  "M2(수능형)",
+    ACE_M3_G1: "M3(고1형)",
+    ACE_M3_G2: "M3(고2형)"
+  };
+
+  const examsKey = examsKeyMap[row.examKey];
+  const title    = titleMap[row.examKey] || "";
+  const examData = (typeof EXAMS !== "undefined" && examsKey) ? EXAMS[examsKey] : null;
+
+  let totalScore    = "-";
+  let assignedLevel = "-";
+
+  if (examData && Array.isArray(row.obj) && row.obj.length > 0) {
+    let earned = 0;
+    examData.forEach((q, idx) => {
+      const user = String(row.obj[idx] ?? "").trim();
+      if (user === String(q.ans)) earned += q.score;
+    });
+    const possible = examData.reduce((sum, q) => sum + q.score, 0);
+    totalScore = possible > 0 ? Math.round(earned / possible * 100) : 0;
+
+    const reportGrade = (typeof getReportGradeForExam === "function")
+      ? getReportGradeForExam(row.grade, title)
+      : row.grade;
+
+    assignedLevel = (typeof getAssignedLevel === "function")
+      ? getAssignedLevel(reportGrade, title, totalScore, row.testDate)
+      : "-";
+  }
 
   return {
     _bulkId: row.id,
@@ -664,16 +707,14 @@ function buildBulkAceResult(row) {
     testDate: row.testDate || "",
     examKey: row.examKey || "",
     examName: schema?.label || row.examKey || "",
-    totalScore: "-",
-    assignedLevel: "-",
-    objectiveEntered: objectiveTotal,
-    vocabEntered: vocabTotal,
-    transEntered: transTotal,
+    totalScore,
+    assignedLevel,
     obj: Array.isArray(row.obj) ? [...row.obj] : [],
     vocab: Array.isArray(row.vocab) ? [...row.vocab] : [],
     trans: Array.isArray(row.trans) ? [...row.trans] : []
   };
 }
+
 
 function openBulkAceResultReport(bulkId) {
   const target = CHESS_BULK_RESULTS.find(item => item._bulkId === bulkId);
