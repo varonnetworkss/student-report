@@ -2904,24 +2904,24 @@ function getLevelOptions(grade, examName) {
   let levels = [];
 
   if (g === "초등6" || g === "초6" || ((g === "초등5" || g === "초5") && e === "E6")) {
-    levels = ["PA1", "PA2", "A1", "A2"];
+    levels = ["B", "HB", "PA1", "PA2", "A1" , "A2"];
   } else if (g === "중등1" || g === "중1") {
     if (e === "M1(수능형)") {
-      levels = ["A1", "A2", "MA1", "MA2"];
+      levels = ["PA1", "PA2", "A1","A2","MA1","MA2"];
     } else {
-      levels = ["PA1", "PA2", "A1"];
+      levels = ["PA1", "PA2", "A1","A2","MA1","MA2"];
     }
   } else if (g === "중등2" || g === "중2") {
     if (e === "M2(수능형)") {
-      levels = ["MA1", "MA2", "MA3", "HA1", "HA2", "HM1", "HM2"];
+      levels = ["A1", "A2", "MA1","MA2", "MA3","HM1"];
     } else {
-      levels = ["A1", "A2", "MA1"];
+      levels = ["A1", "A2", "MA1","MA2", "MA3","HM1"];
     }
   } else if (g === "중등3" || g === "중3") {
     if (e === "M3(고2형)") {
-      levels = ["HM2", "HM3"];
+      levels = ["MA1","MA2", "MA3","HM1", "HM2","HM3"];
     } else {
-      levels = ["HA2", "HM1", "HM2"];
+      levels = ["MA1","MA2", "MA3","HM1", "HM2","HM3"];
     }
   }
 
