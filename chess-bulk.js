@@ -705,7 +705,7 @@ function openBulkAceResultReport(bulkId) {
     examKey
   );
 
-  setTimeout(() => {
+   setTimeout(() => {
     (target.obj || []).forEach((val, idx) => {
       const el = document.getElementById(`q-${idx + 1}`);
       if (el) el.value = val;
@@ -716,18 +716,10 @@ function openBulkAceResultReport(bulkId) {
       if (el) el.value = val;
     });
 
-       (target.trans || []).forEach((val, idx) => {
+    (target.trans || []).forEach((val, idx) => {
       const el = document.getElementById(`trans-score-${idx + 1}`);
       if (el) el.value = val;
     });
-
-
-  console.log("ACE title:", title);
-  console.log("q1:", document.getElementById("q-1")?.value);
-  console.log("q2:", document.getElementById("q-2")?.value);
-  console.log("q39:", document.getElementById("q-39")?.value);
-  console.log("vocab1:", document.getElementById("vocab-1")?.value);
-  console.log("trans1:", document.getElementById("trans-1")?.value);
 
     checkExam(
       target.memberCode || "",
@@ -738,8 +730,14 @@ function openBulkAceResultReport(bulkId) {
       title,
       examKey
     );
+
+    // 드롭다운에서 변경한 레벨이 있으면 LAST_REPORT_SESSION에 반영
+    if (LAST_REPORT_SESSION && target.assignedLevel && target.assignedLevel !== "-") {
+      LAST_REPORT_SESSION.assignedLevel = target.assignedLevel;
+    }
   }, 0);
 }
+
 
 function bulkEvaluateAll() {
   const validRows = CHESS_BULK_ROWS.filter(row =>
@@ -1026,7 +1024,7 @@ function bulkRenderAceReportForPrint(target) {
       });
 
 
-      checkExam(
+           checkExam(
         target.memberCode || "",
         target.name || "",
         target.school || "",
@@ -1035,6 +1033,12 @@ function bulkRenderAceReportForPrint(target) {
         title,
         examKey
       );
+
+      // 드롭다운에서 변경한 레벨이 있으면 LAST_REPORT_SESSION에 반영
+      if (LAST_REPORT_SESSION && target.assignedLevel && target.assignedLevel !== "-") {
+        LAST_REPORT_SESSION.assignedLevel = target.assignedLevel;
+      }
+
 
       setTimeout(() => {
         goToFinalReport(
