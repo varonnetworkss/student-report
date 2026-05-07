@@ -777,6 +777,11 @@ function renderChessReview(data) {
     </div>
   ` : "";
 
+   const chessLevelOpts = getLevelOptions("", examName);
+  const chessLevelSelect = chessLevelOpts.map(lv =>
+    `<option value="${lv}" ${lv === assignedLevel ? "selected" : ""}>${lv}</option>`
+  ).join("");
+
   app.innerHTML = `
     <div class="top-bar no-print sticky-actions">
       <button class="secondary" onclick="renderChessInput({
@@ -791,7 +796,16 @@ function renderChessReview(data) {
       <button class="secondary" onclick="renderHome()">처음으로</button>
     </div>
 
+    <div class="top-bar no-print" style="margin-top:8px; gap:10px; align-items:center;">
+      <span style="font-weight:700; color:#1f5d96;">자동 배정 레벨: <strong>${esc(assignedLevel)}</strong></span>
+      <span style="color:#64748b;">→ 직접 변경:</span>
+      <select onchange="overrideChessLevel(this.value)" style="font-size:15px; font-weight:700; padding:6px 12px; border-radius:10px; border:1.5px solid #1f5d96; color:#1f5d96;">
+        ${chessLevelSelect}
+      </select>
+    </div>
+
     <h1>채점 결과 확인</h1>
+
     <p class="muted" style="margin-bottom:16px;">
       <strong>${name}</strong> · ${school} · ${grade} · ${formatDate(testDate)} · ${examName}
     </p>
@@ -832,6 +846,11 @@ function renderChessReview(data) {
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+function overrideChessLevel(newLevel) {
+  if (!LAST_CHESS_SESSION) return;
+  LAST_CHESS_SESSION.assignedLevel = newLevel;
+}
+
 function renderChessReport() {
   if (!LAST_CHESS_SESSION || typeof LAST_CHESS_SESSION.totalScore === "undefined") {
     alert("채점 결과가 없습니다.");
