@@ -3693,4 +3693,81 @@ body:has(.bulk-page-wide) select,
 body:has(.bulk-page-wide) textarea {
   max-width: 100% !important;
 }
+/* =========================
+   CHESS BULK PRINT BLANK PAGE FIX
+   ========================= */
+@media print {
 
+  /* 단체입력/체스 성적표 출력 시 빈 페이지 방지 */
+  .bulk-page-wide,
+  .bulk-page-wide .report-page,
+  .bulk-page-wide #reportArea {
+    display: block !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* 기존 .wrap flex 때문에 인쇄 페이지 높이 밀리는 것 방지 */
+  .wrap:has(.bulk-page-wide) {
+    display: block !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-items: initial !important;
+    justify-content: initial !important;
+  }
+
+  /* 핵심: A4 높이 고정 제거 */
+  .bulk-page-wide .page {
+    width: 210mm !important;
+    max-width: 210mm !important;
+    min-height: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 6mm !important;
+    overflow: visible !important;
+    break-after: auto !important;
+    page-break-after: auto !important;
+    break-before: auto !important;
+    page-break-before: auto !important;
+  }
+
+  /* 진짜 여러 장짜리 성적표일 때만 다음 페이지로 넘김 */
+  .bulk-page-wide .page:not(:last-child) {
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  .bulk-page-wide .page:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  /* CHESS 카드가 통째로 다음 장으로 밀리면서 빈 장 만드는 것 방지 */
+  .bulk-page-wide .chess-section,
+  .bulk-page-wide .report-card {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    margin: 8px 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* 화면용 입력 영역은 출력에서 제거 */
+  .bulk-page-wide .bulk-layout,
+  .bulk-page-wide .bulk-table-card,
+  .bulk-page-wide .bulk-detail-card,
+  .bulk-page-wide .sticky-actions,
+  .bulk-page-wide .top-bar,
+  .bulk-page-wide .no-print,
+  .bulk-page-wide button {
+    display: none !important;
+  }
+}
