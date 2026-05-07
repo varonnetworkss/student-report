@@ -1037,7 +1037,19 @@ function bulkRenderAceReportForPrint(target) {
         examKey
       );
 
-      setTimeout(resolve, 100);
+      setTimeout(() => {
+        goToFinalReport(
+          target.memberCode || "",
+          target.name || "",
+          target.school || "",
+          target.grade || "",
+          target.testDate || "",
+          title,
+          examKey
+        );
+
+        setTimeout(resolve, 100);
+      }, 100);
     }, 0);
   });
 }
