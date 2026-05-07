@@ -2279,22 +2279,6 @@ function evaluateVTExam() {
   };
 }
 
-  });
-
-  const transTotal    = transResults.reduce((sum, item) => sum + item.earned, 0);
-  const transPossible = transResults.reduce((sum, item) => sum + item.max,    0);
-
-  return {
-    vocabResults,
-    vocabGroups,
-    vocabTotal,
-    vocabPossible: vocabTotal.possible,
-    transResults,
-    transTotal,
-    transPossible
-  };
-}
-
 function validateTransScoreInput(input, max) {
   const raw = String(input.value || "").trim();
 
