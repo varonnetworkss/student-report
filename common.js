@@ -2245,8 +2245,8 @@ function evaluateVTExam() {
   };
   vocabTotal.rate = percent(vocabTotal.earned, vocabTotal.possible);
 
- const transResults = TRANS_ITEMS.map(item => {
-  const raw = (document.getElementById(`trans-score-${item.no}`)?.value || "0").trim();
+const transResults = TRANS_ITEMS.map(item => {
+  const raw = (document.getElementById(`trans-score-${item.no}`)?.value || "").trim();
   const score = Number(raw);
 
   if (raw === "" || Number.isNaN(score)) {
@@ -2259,31 +2259,26 @@ function evaluateVTExam() {
 
   const earned = score;
   const rate = percent(earned, item.max);
-  return { ...item, earned, rate };
-});
 
   return {
-    vocabResults,
-    vocabGroups,
-    vocabTotal,
-    transResults
+    ...item,
+    earned,
+    rate
   };
-}
+});
 function validateTransScoreInput(input, max) {
   const raw = String(input.value || "").trim();
 
-  input.setCustomValidity("");
+  input.classList.remove("input-error");
 
   if (raw === "") return;
 
   const score = Number(raw);
 
   if (Number.isNaN(score) || score < 0 || score > max) {
-    input.setCustomValidity(`0~${max}점 사이로 입력해 주세요.`);
-    input.reportValidity();
     input.classList.add("input-error");
-    return;
   }
+}
 
   input.classList.remove("input-error");
 }
