@@ -2943,32 +2943,3 @@ const app = document.getElementById('app');
 if (app) {
   renderHome();
 }
-// 기존 window.onload 코드를 지우고 이걸로 바꾸세요.
-function forceBackground() {
-    const wrap = document.querySelector('.wrap');
-    const topBar = document.querySelector('.top-bar');
-    const stickyActions = document.querySelector('.sticky-actions');
-
-    // 1. 배경 그라데이션 강제 적용
-    if (wrap) {
-        wrap.style.setProperty('background', 'linear-gradient(135deg, #cfe8ff 0%, #fff0f8 50%, #ffd9ea 100%)', 'important');
-    }
-    
-    // 2. 문제의 상단 흰색 박스(top-bar) 투명화
-    if (topBar) topBar.style.setProperty('background', 'transparent', 'important');
-    if (stickyActions) stickyActions.style.setProperty('background', 'transparent', 'important');
-
-    // 3. 혹시나 있을지 모르는 배경 가리는 요소들 제거
-    document.body.style.background = 'transparent';
-}
-
-// 화면이 바뀔 때마다(렌더링될 때마다) 배경을 다시 그리는 감시자(Observer) 실행
-const observer = new MutationObserver(() => {
-    forceBackground();
-});
-
-// 문서 전체를 감시하여 변화가 생기면 배경을 다시 강제로 입힙니다.
-observer.observe(document.body, { childList: true, subtree: true });
-
-// 처음 로드될 때도 실행
-forceBackground();
