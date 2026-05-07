@@ -2602,11 +2602,24 @@ function renderAnswerReview(memberCode, name, school, grade, testDate, title, ex
     </div>
   `).join("");
 
+   const levelOpts = getLevelOptions(grade, title);
+  const levelOptions = levelOpts.map(lv =>
+    `<option value="${lv}" ${lv === assignedLevel ? "selected" : ""}>${lv}</option>`
+  ).join("");
+
   app.innerHTML = `
     <div class="top-bar no-print sticky-actions">
       <button class="secondary" onclick="restoreExamInput()">답안입력으로 돌아가기</button>
       <button onclick="goToFinalReport('${escapeJs(memberCode)}','${escapeJs(name)}','${escapeJs(school)}','${escapeJs(grade)}','${escapeJs(testDate)}','${escapeJs(title)}','${escapeJs(examKey)}')">성적표 보기</button>
       <button class="secondary" onclick="goBack()">처음으로</button>
+    </div>
+
+    <div class="top-bar no-print" style="margin-top:8px; gap:10px; align-items:center;">
+      <span style="font-weight:700; color:#1f5d96;">자동 배정 레벨: <strong>${esc(assignedLevel)}</strong></span>
+      <span style="color:#64748b;">→ 직접 변경:</span>
+      <select id="levelOverrideSelect" onchange="overrideAssignedLevel(this.value)" style="font-size:15px; font-weight:700; padding:6px 12px; border-radius:10px; border:1.5px solid #1f5d96; color:#1f5d96;">
+        ${levelOptions}
+      </select>
     </div>
 
     <h1>채점 결과 확인</h1>
@@ -2635,7 +2648,10 @@ reportGrade
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
+function overrideAssignedLevel(newLevel) {
+  if (!LAST_REPORT_SESSION) return;
+  LAST_REPORT_SESSION.assignedLevel = newLevel;
+}
 function goToFinalReport(memberCode, name, school, grade, testDate, title, examKey) {
   if (LAST_REPORT_SESSION) {
     renderReportScreen(
@@ -2852,6 +2868,36 @@ function getAssignedLevel(grade, examName, score, testDate = "") {
   }
 
   return "미배정";
+}
+function getLevelOptions(grade, examName) {
+  const g = String(grade || "").replace(/\s/g, "");
+  const e = String(examName || "").replace(/\s/g, "");
+
+  let levels = [];
+
+  if (g === "초등6" || g === "초6" || ((g === "초등5" || g === "초5") && e === "E6")) {
+    levels = ["PA1", "PA2", "A1", "A2"];
+  } else if (g === "중등1" || g === "중1") {
+    if (e === "M1(수능형)") {
+      levels = ["A1", "A2", "MA1", "MA2"];
+    } else {
+      levels = ["PA1", "PA2", "A1"];
+    }
+  } else if (g === "중등2" || g === "중2") {
+    if (e === "M2(수능형)") {
+      levels = ["MA1", "MA2", "MA3", "HA1", "HA2", "HM1", "HM2"];
+    } else {
+      levels = ["A1", "A2", "MA1"];
+    }
+  } else if (g === "중등3" || g === "중3") {
+    if (e === "M3(고2형)") {
+      levels = ["HM2", "HM3"];
+    } else {
+      levels = ["HA2", "HM1", "HM2"];
+    }
+  }
+
+  return ["미배정", ...levels];
 }
 
 function buildCoverPage(memberCode, name, school, grade, testDate, title, introText) {
