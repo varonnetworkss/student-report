@@ -2245,42 +2245,40 @@ function evaluateVTExam() {
   };
   vocabTotal.rate = percent(vocabTotal.earned, vocabTotal.possible);
 
-const transResults = TRANS_ITEMS.map(item => {
-  const raw = (document.getElementById(`trans-score-${item.no}`)?.value || "").trim();
+  const transResults = TRANS_ITEMS.map(item => {
+    const raw = (document.getElementById(`trans-score-${item.no}`)?.value || "").trim();
 
-  // 빈칸이면 0점 처리
-  if (raw === "") {
-    const earned = 0;
-    const rate = percent(earned, item.max);
+    if (raw === "") {
+      return { ...item, earned: 0, rate: percent(0, item.max) };
+    }
 
-    return {
-      ...item,
-      earned,
-      rate
-    };
-  }
+    const score = Number(raw);
 
-  const score = Number(raw);
+    if (Number.isNaN(score)) {
+      throw new Error(`${item.no}번 해석 점수는 숫자로 입력해야 합니다.`);
+    }
 
-  // 숫자 아니면 에러
-  if (Number.isNaN(score)) {
-    throw new Error(`${item.no}번 해석 점수는 숫자로 입력해야 합니다.`);
-  }
+    if (score < 0 || score > item.max) {
+      throw new Error(`${item.no}번 해석 점수는 0~${item.max}점 사이로 입력해야 합니다.`);
+    }
 
-  // 범위 초과면 에러
-  if (score < 0 || score > item.max) {
-    throw new Error(`${item.no}번 해석 점수는 0~${item.max}점 사이로 입력해야 합니다.`);
-  }
+    return { ...item, earned: score, rate: percent(score, item.max) };
+  });
 
-  const earned = score;
-  const rate = percent(earned, item.max);
+  const transTotal    = transResults.reduce((sum, item) => sum + item.earned, 0);
+  const transPossible = transResults.reduce((sum, item) => sum + item.max,    0);
 
   return {
-    ...item,
-    earned,
-    rate
+    vocabResults,
+    vocabGroups,
+    vocabTotal,
+    vocabPossible: vocabTotal.possible,
+    transResults,
+    transTotal,
+    transPossible
   };
-});
+}
+
 function validateTransScoreInput(input, max) {
   const raw = String(input.value || "").trim();
 
@@ -2294,6 +2292,7 @@ function validateTransScoreInput(input, max) {
     input.classList.add("input-error");
   }
 }
+
 
   input.classList.remove("input-error");
 }
@@ -2576,8 +2575,15 @@ const interviewResult = collectChessInterviewResult(title, examKey);
   });
 
   vtState = { vocabAnswers, transScores };
-  vtEvaluation = evaluateVTExam();
+
+  try {
+    vtEvaluation = evaluateVTExam();
+  } catch (err) {
+    alert(err.message || "해석 점수를 확인해 주세요.");
+    return;
+  }
 }
+
 
 const evaluation = evaluateExam(examData);
 const reportGrade = getReportGradeForExam(grade, title);
