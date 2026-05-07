@@ -2247,12 +2247,27 @@ function evaluateVTExam() {
 
 const transResults = TRANS_ITEMS.map(item => {
   const raw = (document.getElementById(`trans-score-${item.no}`)?.value || "").trim();
-  const score = Number(raw);
 
-  if (raw === "" || Number.isNaN(score)) {
-    throw new Error(`${item.no}번 해석 점수를 입력해 주세요.`);
+  // 빈칸이면 0점 처리
+  if (raw === "") {
+    const earned = 0;
+    const rate = percent(earned, item.max);
+
+    return {
+      ...item,
+      earned,
+      rate
+    };
   }
 
+  const score = Number(raw);
+
+  // 숫자 아니면 에러
+  if (Number.isNaN(score)) {
+    throw new Error(`${item.no}번 해석 점수는 숫자로 입력해야 합니다.`);
+  }
+
+  // 범위 초과면 에러
   if (score < 0 || score > item.max) {
     throw new Error(`${item.no}번 해석 점수는 0~${item.max}점 사이로 입력해야 합니다.`);
   }
