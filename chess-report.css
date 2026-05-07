@@ -407,7 +407,9 @@
     padding: 10mm 10mm 12mm;
     background: #fff !important;
   }
-
+.chess-report-cover {
+  min-height: 277mm;
+}
   .chess-report-title {
     font-size: 40px;
   }
