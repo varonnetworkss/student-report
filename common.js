@@ -2786,15 +2786,16 @@ function getAssignedLevel(grade, examName, score, testDate = "") {
 
   const term = getTermInfo(testDate)?.term || "";
 
-  // 초6
- if (
+// 초6
+if (
   g === "초등6" || g === "초6" ||
   ((g === "초등5" || g === "초5") && e === "E6")
 ) {
-  if (s >= 85) return "A2";
   if (s >= 75) return "A1";
   if (s >= 65) return "PA2";
-  if (s >= 55) return "PA1";
+  if (s >= 60) return "PA1";
+  if (s >= 45) return "HB";
+  if (s >= 30) return "B";
   return "미배정";
 }
 
